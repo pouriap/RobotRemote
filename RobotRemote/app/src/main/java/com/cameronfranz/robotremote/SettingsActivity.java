@@ -7,7 +7,9 @@ import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,13 +24,15 @@ public class SettingsActivity extends AppCompatActivity {
         EditText sendPort = (EditText) findViewById(R.id.settingsSendPort);
         EditText receivePort = (EditText) findViewById(R.id.settingsReceivePort);
         EditText updateRate = (EditText) findViewById(R.id.settingsUpdateRate);
+        CheckBox snapBack = (CheckBox) findViewById(R.id.checkBoxSnapBack);
 
         SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        ipAddress.setText(spref.getString("controller_ip",""));
+        ipAddress.setText(spref.getString("controller_ip", ""));
         sendPort.setText(Integer.toString(spref.getInt("controller_send_port",8111)));
         receivePort.setText(Integer.toString(spref.getInt("controller_receive_port",8112)));
-        updateRate.setText(Integer.toString(spref.getInt("controller_update_rate",60)));
+        updateRate.setText(Integer.toString(spref.getInt("controller_update_rate", 60)));
+        snapBack.setChecked(spref.getBoolean("snap_back", true));
     }
 
     public void saveSettings(View view) {
@@ -36,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         EditText sendPort = (EditText) findViewById(R.id.settingsSendPort);
         EditText receivePort = (EditText) findViewById(R.id.settingsReceivePort);
         EditText updateRate = (EditText) findViewById(R.id.settingsUpdateRate);
+        CheckBox snapBack = (CheckBox) findViewById(R.id.checkBoxSnapBack);
 
         String ipAddressString;
         int portInt;
@@ -44,9 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = spref.edit();
 
             editor.putString("controller_ip",ipAddress.getText().toString());
-            editor.putInt("controller_send_port",Integer.parseInt(sendPort.getText().toString()));
+            editor.putInt("controller_send_port", Integer.parseInt(sendPort.getText().toString()));
             editor.putInt("controller_receive_port",Integer.parseInt(receivePort.getText().toString()));
             editor.putInt("controller_update_rate",Integer.parseInt(updateRate.getText().toString()));
+            editor.putBoolean("snap_back", snapBack.isChecked());
 
             editor.commit();
 

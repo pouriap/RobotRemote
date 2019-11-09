@@ -35,6 +35,7 @@ public class ControllerActivity extends AppCompatActivity {
     private Thread sendThread;
     private UDPReceiveServer receiveServer;
     private Thread receiveThread;
+    private boolean snapBack;
     TextView telemetryText;
 
 
@@ -47,11 +48,11 @@ public class ControllerActivity extends AppCompatActivity {
         initializeDefaultState();
 
         SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(this);
-        String controller_ip = spref.getString("controller_ip","192.168.1.1");
-        int sendPort = spref.getInt("controller_send_port",8111);
+        String controller_ip = spref.getString("controller_ip", "192.168.1.1");
+        int sendPort = spref.getInt("controller_send_port", 8111);
         int recievePort = spref.getInt("controller_receive_port",8112);
-        int updateRate = spref.getInt("controller_update_rate",60);
-
+        int updateRate = spref.getInt("controller_update_rate", 60);
+        snapBack = spref.getBoolean("snap_back", true);
 
         sendServer = new UDPSendServer(ctrlStateOutgoing);
         sendServer.setDestination(controller_ip, sendPort);
@@ -85,30 +86,44 @@ public class ControllerActivity extends AppCompatActivity {
     }
     private View.OnTouchListener touchPadHandler = new View.OnTouchListener(){
         public boolean onTouch(View view, MotionEvent event) {
-            float relativeXPos = event.getX();
-            float relativeYPos = event.getY();
 
-            //Centered and normalized to +- 100
-            int normalizedXPos = (int) ((event.getX() - view.getWidth()/2)
-                    *TOUCHPAD_RANGE*2/view.getWidth());
-            int normalizedYPos = (int) ((-(event.getY()-view.getHeight()/2))
-                    *TOUCHPAD_RANGE*2/view.getHeight());
-
-            normalizedXPos = limitRange(normalizedXPos,-TOUCHPAD_RANGE,TOUCHPAD_RANGE);
-            normalizedYPos = limitRange(normalizedYPos,-TOUCHPAD_RANGE,TOUCHPAD_RANGE);
-
-
-            switch (view.getId()) {
-                case R.id.ctrl_leftTouchPad:
-                    ctrlStateOutgoing.put("'leftTouchPadX'",normalizedXPos);
-                    ctrlStateOutgoing.put("'leftTouchPadY'",normalizedYPos);
-                    break;
-                case R.id.ctrl_rightTouchPad:
-                    ctrlStateOutgoing.put("'rightTouchPadX'",normalizedXPos);
-                    ctrlStateOutgoing.put("'rightTouchPadY'",normalizedYPos);
-                    break;
-
+            //snap-back when released
+            if(event.getAction() == MotionEvent.ACTION_UP){
+                if(snapBack){
+                    ctrlStateOutgoing.put("'leftTouchPadX'",0);
+                    ctrlStateOutgoing.put("'leftTouchPadY'",0);
+                    ctrlStateOutgoing.put("'rightTouchPadX'",0);
+                    ctrlStateOutgoing.put("'rightTouchPadY'",0);
+                }
             }
+            else {
+
+                float relativeXPos = event.getX();
+                float relativeYPos = event.getY();
+
+                //Centered and normalized to +- 100
+                int normalizedXPos = (int) ((event.getX() - view.getWidth() / 2)
+                        * TOUCHPAD_RANGE * 2 / view.getWidth());
+                int normalizedYPos = (int) ((-(event.getY() - view.getHeight() / 2))
+                        * TOUCHPAD_RANGE * 2 / view.getHeight());
+
+                normalizedXPos = limitRange(normalizedXPos, -TOUCHPAD_RANGE, TOUCHPAD_RANGE);
+                normalizedYPos = limitRange(normalizedYPos, -TOUCHPAD_RANGE, TOUCHPAD_RANGE);
+
+
+                switch (view.getId()) {
+                    case R.id.ctrl_leftTouchPad:
+                        ctrlStateOutgoing.put("'leftTouchPadX'", normalizedXPos);
+                        ctrlStateOutgoing.put("'leftTouchPadY'", normalizedYPos);
+                        break;
+                    case R.id.ctrl_rightTouchPad:
+                        ctrlStateOutgoing.put("'rightTouchPadX'", normalizedXPos);
+                        ctrlStateOutgoing.put("'rightTouchPadY'", normalizedYPos);
+                        break;
+
+                }
+            }
+
             updateTouchPadMarkers();
             return true;
         }

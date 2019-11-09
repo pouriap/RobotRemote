@@ -11,6 +11,7 @@
     <string name="settings_send_port">Destination Port</string>
     <string name="settings_receive_port">Receive Port</string>
     <string name="settings_update_freq">Send Frequency</string>
+    <string name="settings_snap_back">Snap Back Pads</string>
 
 
     <string name="help_1">This app sends information from the controller — joystick positions and button states — to a device over WIFI using the UDP protocol.</string>

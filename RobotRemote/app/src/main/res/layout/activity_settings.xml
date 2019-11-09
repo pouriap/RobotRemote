@@ -84,6 +84,34 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" >
+
+        <TextView
+            style="@style/SettingsTextView"
+            android:text="@string/settings_snap_back" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/darkPrimary"
+            android:layout_weight="0.4">
+
+            <CheckBox
+                android:id="@+id/checkBoxSnapBack"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <Button
         android:layout_gravity="center"
         android:layout_width="wrap_content"
