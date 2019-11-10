@@ -59,12 +59,11 @@
                     android:background="@android:color/white" />
 
                 <ImageView android:id="@+id/leftTouchPadMarker"
-                    android:layout_width="30px"
-                    android:layout_height="30px"
+                    android:layout_width="60px"
+                    android:layout_height="60px"
                     android:layout_gravity="center"
                     android:background="@drawable/dot"
-                    android:adjustViewBounds="true"
-                    android:src="@android:drawable/ic_menu_add" />
+                    android:adjustViewBounds="true" />
 
 
             </FrameLayout>
@@ -138,12 +137,11 @@
                     android:background="@android:color/white" />
 
                 <ImageView android:id="@+id/rightTouchPadMarker"
-                    android:layout_width="30px"
-                    android:layout_height="30px"
+                    android:layout_width="60px"
+                    android:layout_height="60px"
                     android:layout_gravity="center"
                     android:background="@drawable/dot"
-                    android:adjustViewBounds="true"
-                    android:src="@android:drawable/ic_menu_add" />
+                    android:adjustViewBounds="true" />
 
 
 
